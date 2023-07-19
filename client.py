@@ -1,26 +1,13 @@
 import paho.mqtt.client as mqtt
-import json
-import random
-import datetime
 import time
+from json_parser import read_JSON
 
-CLIENT_ID = 'paho_client_01'
-BROKER_IP = '192.168.1.1'
+CLIENT_ID   = 'paho_client_01'
+BROKER_IP   = '192.168.1.1'
+JSON_FILE   = './mqtt_msg.json'
+PUB_FREQ    = 5 #sec
 
 u_data = {}
-
-def get_JSONMessage():
-    return  json.dumps({'temperature':round(gen_value(10,20), 2),
-                        'humidity':round(gen_value(28,30), 2),
-                        'timestamp':str(datetime.datetime.now()),
-                        'wind':round(gen_value(2,5), 2),
-                        'rain':0,
-                        'pressure':round(gen_value(1005,1007), 2),
-                        'posLat':round(gen_value(25.041, 25.044), 4),
-                        'posLon':round(gen_value(55.217, 55.220), 4)}, indent=4)
-
-def gen_value(minv, maxv):
-    return random.random() * (maxv - minv) + minv
 
 def client_init(client_id):
     client = mqtt.Client(client_id, clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport='tcp')
@@ -46,16 +33,17 @@ def on_subscribe(client_id, userdata, mid, granted_qos):
     print(f"client <{userdata['id']}>: Subscribing request id={mid}, qos={', '.join(str(i) for i in granted_qos)}")
 
 def pub_JSON(client):
-    pub_msg = get_JSONMessage()
+    pub_msg = read_JSON(JSON_FILE)
     u_data['pub_msg'] = pub_msg
+    time.sleep(PUB_FREQ)
     client.user_data_set(u_data)
-    client.publish('megatopic/value',pub_msg, qos=1)
-    time.sleep(5)
+    client.publish('megatopic/value', str(pub_msg), qos=0)
+    
 
 if __name__ == "__main__":
     client = client_init(CLIENT_ID)
     client.connect(BROKER_IP, port=1883)
-    client.subscribe('notmytopics/#', qos=2)
+    client.subscribe('notmytopics/#', qos=0)
     client.loop_start()
     while True:
         pub_JSON(client)
