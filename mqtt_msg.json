@@ -1,0 +1,52 @@
+[
+    {
+        "parameter": "humidity",
+        "type": "float",
+        "value": null,
+        "min": 28,
+        "max": 30,
+        "decimal": 2
+    },
+    {
+        "parameter": "timestamp",
+        "type": "timestamp",
+        "value": null
+    },
+    {
+        "parameter": "wind",
+        "type": "float",
+        "value": null,
+        "min": 2,
+        "max": 5,
+        "decimal": 2
+    },
+    {
+        "parameter": "rain",
+        "type": "float",
+        "value": 0
+    },
+    {
+        "parameter": "pressure",
+        "type": "float",
+        "value": null,
+        "min": 1005,
+        "max": 1007,
+        "decimal": 2
+    },
+    {
+        "parameter": "posLat",
+        "type": "float",
+        "value": null,
+        "min": 25.041,
+        "max": 25.044,
+        "decimal": 4
+    },
+    {
+        "parameter": "posLon",
+        "type": "float",
+        "value": null,
+        "min": 55.217,
+        "max": 55.220,
+        "decimal": 4
+    }
+]
