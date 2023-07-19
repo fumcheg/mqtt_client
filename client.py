@@ -2,7 +2,6 @@ import paho.mqtt.client as mqtt
 import json
 import random
 import datetime
-#import threading
 import time
 
 CLIENT_ID = 'paho_client_01'
@@ -46,8 +45,6 @@ def on_subscribe(client_id, userdata, mid, granted_qos):
 def pub_JSON(client):
     pub_msg = get_JSONMessage()
     client.publish('megatopic/value',pub_msg, qos=1)
-    #timer = threading.Timer(5.0, pub_JSON, args=(client,))
-    #timer.start()
     time.sleep(5)
 
 if __name__ == "__main__":
@@ -57,6 +54,3 @@ if __name__ == "__main__":
     client.loop_start()
     while True:
         pub_JSON(client)
-
-    #pub_JSON(client)
-    #client.loop_forever()
