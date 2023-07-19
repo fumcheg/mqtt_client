@@ -7,6 +7,8 @@ import time
 CLIENT_ID = 'paho_client_01'
 BROKER_IP = '192.168.1.1'
 
+u_data = {}
+
 def get_JSONMessage():
     return  json.dumps({'temperature':round(gen_value(10,20), 2),
                         'humidity':round(gen_value(28,30), 2),
@@ -22,7 +24,8 @@ def gen_value(minv, maxv):
 
 def client_init(client_id):
     client = mqtt.Client(client_id, clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport='tcp')
-    client.user_data_set({'id':client_id})
+    u_data['id'] = client_id
+    client.user_data_set(u_data)
     client.on_connect = on_connect
     client.on_publish = on_publish
     client.on_subscribe = on_subscribe
@@ -33,17 +36,19 @@ def on_connect(client_id, userdata, flags, rc):
     print(f"client <{userdata['id']}>: Connection result is {('OK', 'NOT OK')[bool(rc)]}")
 
 def on_publish(client_id, userdata, mid):
-    print(f"client <{userdata['id']}>: Publishing message id={mid}")
+    print(f"client <{userdata['id']}>: Publishing message id={mid} -> Message payload:\n{u_data['pub_msg']}")
 
 def on_message(client_id, userdata, message):
-    print(f"client <{userdata['id']}>: Recieved message with topic={message.topic}," +
-            "payload={message.payload}, qos={message.qos}, retain={message.retain}")
+    print(f"client <{userdata['id']}>: Recieved message with topic={message.topic}, " +
+            f"payload={message.payload}, qos={message.qos}, retain={message.retain}")
 
 def on_subscribe(client_id, userdata, mid, granted_qos):
     print(f"client <{userdata['id']}>: Subscribing request id={mid}, qos={', '.join(str(i) for i in granted_qos)}")
 
 def pub_JSON(client):
     pub_msg = get_JSONMessage()
+    u_data['pub_msg'] = pub_msg
+    client.user_data_set(u_data)
     client.publish('megatopic/value',pub_msg, qos=1)
     time.sleep(5)
 
