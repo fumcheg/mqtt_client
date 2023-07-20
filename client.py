@@ -42,9 +42,16 @@ def pub_JSON(client):
     
 
 if __name__ == "__main__":
-    client = client_init(CLIENT_ID)
-    client.connect(BROKER_IP, port=1883)
-    client.subscribe('notmytopics/#', qos=0)
-    client.loop_start()
-    while True:
-        pub_JSON(client)
+    try:
+        client = client_init(CLIENT_ID)
+        client.connect(BROKER_IP, port=1883)
+        client.subscribe('notmytopics/#', qos=0)
+        client.loop_start()
+        while True:
+            pub_JSON(client)
+    except TimeoutError:
+        print("\nERR: Connection timeout")
+    except KeyboardInterrupt:
+        print("\nERR: Script was terminated by user")
+    except OSError:
+        print("\nERR: Network problem, probably")
