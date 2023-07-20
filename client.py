@@ -6,6 +6,7 @@ CLIENT_ID   = 'paho_client_01'
 BROKER_IP   = '192.168.1.1'
 JSON_FILE   = './mqtt_msg.json'
 PUB_FREQ    = 5 #sec
+PUB_TOPIC   ='aprotech/test'
 
 u_data = {}
 
@@ -37,7 +38,7 @@ def pub_JSON(client):
     u_data['pub_msg'] = pub_msg
     time.sleep(PUB_FREQ)
     client.user_data_set(u_data)
-    client.publish('megatopic/value', str(pub_msg), qos=0)
+    client.publish(PUB_TOPIC, pub_msg, qos=0)
     
 
 if __name__ == "__main__":

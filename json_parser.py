@@ -15,7 +15,7 @@ def read_JSON(fname):
                         msg[param['parameter']] = round(gen_value(param['min'], param['max']), param['decimal'])
                     else:
                         msg[param['parameter']] = param['value']
-    return msg
+    return json.dumps(msg)
 
 def gen_value(minv, maxv):
     return random.random() * (maxv - minv) + minv

@@ -8,6 +8,14 @@
         "decimal": 2
     },
     {
+        "parameter": "temperature",
+        "type": "float",
+        "value": null,
+        "min": 10,
+        "max": 50,
+        "decimal": 2
+    },
+    {
         "parameter": "timestamp",
         "type": "timestamp",
         "value": null
